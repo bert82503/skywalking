@@ -50,10 +50,16 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * 拓扑图查询服务
+ */
 @Slf4j
 public class TopologyQueryService implements Service {
     private final ModuleManager moduleManager;
     private final StorageModels storageModels;
+    /**
+     * 拓扑图查询dao
+     */
     private ITopologyQueryDAO topologyQueryDAO;
     private IComponentLibraryCatalogService componentLibraryCatalogService;
     private MetadataQueryService metadataQueryService;
@@ -86,7 +92,8 @@ public class TopologyQueryService implements Service {
         return componentLibraryCatalogService;
     }
 
-    public Topology getGlobalTopology(final Duration duration, final String layer) throws IOException {
+    public Topology getGlobalTopology(
+            final Duration duration, final String layer) throws IOException {
         if (StringUtil.isNotEmpty(layer)) {
             final List<String> serviceIdList = Optional.ofNullable(getMetadataQueryService().listServices(layer, null))
                 .map(list -> list.stream().map(s -> s.getId()).collect(Collectors.toList()))
@@ -102,13 +109,16 @@ public class TopologyQueryService implements Service {
         return builder.build(serviceRelationClientCalls, serviceRelationServerCalls);
     }
 
-    public Topology getServiceTopology(final Duration duration,
-                                       final List<String> serviceIds) throws IOException {
+    public Topology getServiceTopology(
+            final Duration duration, final List<String> serviceIds) throws IOException {
+        // 客户端调用
         List<Call.CallDetail> serviceRelationClientCalls = getTopologyQueryDAO().loadServiceRelationDetectedAtClientSide(
             duration, serviceIds);
+        // 服务端调用
         List<Call.CallDetail> serviceRelationServerCalls = getTopologyQueryDAO().loadServiceRelationsDetectedAtServerSide(
             duration, serviceIds);
 
+        // 服务拓扑构建者
         ServiceTopologyBuilder builder = new ServiceTopologyBuilder(moduleManager);
         Topology topology = builder.build(serviceRelationClientCalls, serviceRelationServerCalls);
 

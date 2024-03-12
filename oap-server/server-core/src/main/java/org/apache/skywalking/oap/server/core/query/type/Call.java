@@ -26,10 +26,19 @@ import lombok.Setter;
 import org.apache.skywalking.oap.server.core.analysis.IDManager;
 import org.apache.skywalking.oap.server.core.source.DetectPoint;
 
+/**
+ * 服务调用
+ */
 @Getter
 @Setter
 public class Call {
+    /**
+     * 来源服务id
+     */
     private String source;
+    /**
+     * 目标服务id
+     */
     private String target;
     /**
      * Components are detected at the client-side in Service and Process topologies, and no value in instance topology
@@ -45,6 +54,9 @@ public class Call {
      * @since 9.4.0
      */
     private List<String> targetComponents;
+    /**
+     * 服务关系身份
+     */
     private String id;
     private List<DetectPoint> detectPoints;
 
@@ -80,13 +92,31 @@ public class Call {
         }
     }
 
+    /**
+     * 服务调用详情
+     */
     @Setter(AccessLevel.PRIVATE)
     @Getter
     public static class CallDetail {
+        /**
+         * 身份
+         */
         private String id;
+        /**
+         * 来源服务
+         */
         private String source;
+        /**
+         * 目标服务
+         */
         private String target;
+        /**
+         * 探测点
+         */
         private DetectPoint detectPoint;
+        /**
+         * 组件身份
+         */
         private Integer componentId;
 
         public void buildFromServiceRelation(String entityId, int componentId, DetectPoint detectPoint) {

@@ -100,8 +100,18 @@ public final class TermsAggregationBuilder implements AggregationBuilder {
         return subAggregations;
     }
 
+    /**
+     * 数据收集模式
+     */
     public enum CollectMode {
-        BREADTH_FIRST("breadth_first"), DEPTH_FIRST("depth_first");
+        /**
+         * 广度优先算法
+         */
+        BREADTH_FIRST("breadth_first"),
+        /**
+         * 深度优先算法
+         */
+        DEPTH_FIRST("depth_first");
 
         final String value;
 

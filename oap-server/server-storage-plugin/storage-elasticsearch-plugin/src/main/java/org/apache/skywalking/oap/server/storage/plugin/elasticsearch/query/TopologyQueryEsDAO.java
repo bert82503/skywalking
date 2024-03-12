@@ -55,28 +55,33 @@ public class TopologyQueryEsDAO extends EsDAO implements ITopologyQueryDAO {
     }
 
     @Override
-    public List<Call.CallDetail> loadServiceRelationsDetectedAtServerSide(Duration duration, List<String> serviceIds) {
+    public List<Call.CallDetail> loadServiceRelationsDetectedAtServerSide(
+            Duration duration, List<String> serviceIds) {
         if (CollectionUtils.isEmpty(serviceIds)) {
             throw new UnexpectedException("Service id is empty");
         }
 
+        // 搜索查询条件
         final SearchBuilder sourceBuilder = Search.builder().size(0);
         setQueryCondition(sourceBuilder, duration, serviceIds, ServiceRelationServerSideMetrics.INDEX_NAME);
 
+        // 构建服务关系
         return buildServiceRelation(
             sourceBuilder, ServiceRelationServerSideMetrics.INDEX_NAME, DetectPoint.SERVER);
     }
 
     @Override
-    public List<Call.CallDetail> loadServiceRelationDetectedAtClientSide(Duration duration,
-                                                                         List<String> serviceIds) {
+    public List<Call.CallDetail> loadServiceRelationDetectedAtClientSide(
+            Duration duration, List<String> serviceIds) {
         if (CollectionUtils.isEmpty(serviceIds)) {
             throw new UnexpectedException("Service id is empty");
         }
 
+        // 搜索查询条件
         final SearchBuilder sourceBuilder = Search.builder().size(0);
         setQueryCondition(sourceBuilder, duration, serviceIds, ServiceRelationClientSideMetrics.INDEX_NAME);
 
+        // 构建服务关系
         return buildServiceRelation(
             sourceBuilder, ServiceRelationClientSideMetrics.INDEX_NAME, DetectPoint.CLIENT);
     }
@@ -298,8 +303,10 @@ public class TopologyQueryEsDAO extends EsDAO implements ITopologyQueryDAO {
                 .collectMode(TermsAggregationBuilder.CollectMode.BREADTH_FIRST)
                 .size(1000));
 
+        // 物理索引表名称
         final String index =
             IndexController.LogicIndicesRegister.getPhysicalTableName(indexName);
+        // 搜索
         final SearchResponse response = getClient().search(index, sourceBuilder.build());
 
         final List<Call.CallDetail> calls = new ArrayList<>();

@@ -54,10 +54,12 @@ class ServiceTopologyBuilder {
 
     Topology build(List<Call.CallDetail> serviceRelationClientCalls, List<Call.CallDetail> serviceRelationServerCalls) {
 
-        Map<String, Node> nodes = new HashMap<>();
+        Map<String, Node> nodes = new HashMap<>(16);
         List<Call> calls = new LinkedList<>();
-        HashMap<String, Call> callMap = new HashMap<>();
+        // 服务调用关系
+        HashMap<String, Call> callMap = new HashMap<>(16);
 
+        // 服务关系客户端调用列表
         for (Call.CallDetail clientCall : serviceRelationClientCalls) {
             final IDManager.ServiceID.ServiceIDDefinition sourceService = IDManager.ServiceID.analysisId(
                 clientCall.getSource());
@@ -95,15 +97,17 @@ class ServiceTopologyBuilder {
                 nodes.put(sourceServiceId, buildNode(sourceServiceId, sourceService));
             }
 
+            // 服务关系id
             final String relationId = IDManager.ServiceID.buildRelationId(
                 new IDManager.ServiceID.ServiceRelationDefine(sourceServiceId, targetServiceId));
 
             if (!callMap.containsKey(relationId)) {
                 Call call = new Call();
-
                 callMap.put(relationId, call);
+
                 call.setSource(sourceServiceId);
                 call.setTarget(targetServiceId);
+                // 服务关系id
                 call.setId(relationId);
                 call.addDetectPoint(DetectPoint.CLIENT);
                 call.addSourceComponent(componentLibraryCatalogService.getComponentName(clientCall.getComponentId()));
@@ -114,6 +118,7 @@ class ServiceTopologyBuilder {
             }
         }
 
+        // 服务关系服务端调用列表
         for (Call.CallDetail serverCall : serviceRelationServerCalls) {
             final IDManager.ServiceID.ServiceIDDefinition sourceService = IDManager.ServiceID.analysisId(
                 serverCall.getSource());
@@ -193,7 +198,7 @@ class ServiceTopologyBuilder {
         return topology;
     }
 
-    private Node buildNode(String sourceId, IDManager.ServiceID.ServiceIDDefinition sourceService) {
+    private static Node buildNode(String sourceId, IDManager.ServiceID.ServiceIDDefinition sourceService) {
         Node serviceNode = new Node();
         serviceNode.setId(sourceId);
         serviceNode.setName(sourceService.getName());

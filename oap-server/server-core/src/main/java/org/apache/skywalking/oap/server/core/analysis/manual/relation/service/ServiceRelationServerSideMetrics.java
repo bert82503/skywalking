@@ -44,9 +44,21 @@ import org.apache.skywalking.oap.server.core.storage.type.StorageBuilder;
 }, callSuper = true)
 public class ServiceRelationServerSideMetrics extends Metrics {
 
+    /**
+     * 服务关系服务端的索引名称
+     */
     public static final String INDEX_NAME = "service_relation_server_side";
+    /**
+     * 来源服务id
+     */
     public static final String SOURCE_SERVICE_ID = "source_service_id";
+    /**
+     * 目标服务id
+     */
     public static final String DEST_SERVICE_ID = "dest_service_id";
+    /**
+     * 组件id列表
+     */
     public static final String COMPONENT_IDS = "component_ids";
 
     @Setter

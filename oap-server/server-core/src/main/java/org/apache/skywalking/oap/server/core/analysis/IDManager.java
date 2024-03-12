@@ -65,6 +65,7 @@ public class IDManager {
         }
 
         /**
+         * {@code sourceId-destId}
          * @return encoded service relation id
          */
         public static String buildRelationId(ServiceRelationDefine define) {
@@ -93,11 +94,20 @@ public class IDManager {
             private final boolean isReal;
         }
 
+        /**
+         * 服务关系定义
+         */
         @RequiredArgsConstructor
         @Getter
         @EqualsAndHashCode
         public static class ServiceRelationDefine {
+            /**
+             * 来源服务id
+             */
             private final String sourceId;
+            /**
+             * 目标服务id
+             */
             private final String destId;
         }
     }

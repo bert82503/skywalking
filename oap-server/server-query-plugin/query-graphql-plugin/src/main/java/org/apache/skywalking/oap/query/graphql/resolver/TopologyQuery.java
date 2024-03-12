@@ -31,9 +31,15 @@ import org.apache.skywalking.oap.server.core.query.type.ServiceInstanceTopology;
 import org.apache.skywalking.oap.server.core.query.type.Topology;
 import org.apache.skywalking.oap.server.library.module.ModuleManager;
 
+/**
+ * 拓扑图查询
+ */
 public class TopologyQuery implements GraphQLQueryResolver {
 
     private final ModuleManager moduleManager;
+    /**
+     * 拓扑图查询服务
+     */
     private TopologyQueryService queryService;
 
     public TopologyQuery(ModuleManager moduleManager) {
